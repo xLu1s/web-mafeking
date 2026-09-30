@@ -22,6 +22,13 @@
 - Validate changes with Playwright against `npm run preview` on `http://localhost:4321`: check both `/` and `/es/`, desktop (1440x900) and mobile (390x844), console errors, horizontal overflow, broken images, and anchor targets.
 - `astro preview` serves the built `dist/`, so rebuild before re-checking.
 
+## Deployment
+
+- Published to GitHub Pages at `https://xLu1s.github.io/web-mafeking/` from `github.com/xLu1s/web-mafeking`; every push to `main` rebuilds and deploys via `.github/workflows/deploy.yml`.
+- Pages source must be set to **GitHub Actions** (not a branch). The workflow uses `withastro/action` with `node-version: 22`; Astro requires Node >= 22.12 (`package.json` `engines`).
+- `astro.config.mjs` derives `site`/`base` from `GITHUB_REPOSITORY`, so the project subpath is handled automatically in CI while local dev keeps `base: '/'`.
+- Because this is a *project* Pages site, any URL to a file in `public/` or any internal link must go through `import.meta.env.BASE_URL` (see the `asset()` helper in `Landing.astro`); hardcoded `/images/...` or `/es/` paths 404 on the subpath.
+
 ## OpenCode
 
 - Project `opencode.json` enables Figma with `figma-developer-mcp --env .env --stdio`; `.env` must contain `FIGMA_API_KEY` and must remain ignored by Git.
