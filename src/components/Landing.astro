@@ -1,0 +1,397 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../images/logo mafeking.avif';
+import '../styles/global.css';
+
+interface Props {
+  content: any;
+  locale: 'va' | 'es';
+}
+
+const { content: t, locale } = Astro.props;
+const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+const asset = (path: string) => `${base}${path.replace(/^\//, '')}`;
+const homePath = base;
+const esPath = `${base}es/`;
+const currentPath = locale === 'va' ? homePath : esPath;
+const alternatePath = locale === 'va' ? esPath : homePath;
+const gallery = ['images/grup.jpg', 'images/campament.jpg', 'images/aventura.jpg', 'images/equip.jpg'].map(asset);
+---
+
+<!doctype html>
+<html lang={t.lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={t.metaDescription} />
+    <meta name="theme-color" content="#d40000" />
+    <link rel="canonical" href={new URL(currentPath, Astro.site)} />
+    <link rel="alternate" hreflang="ca" href={new URL(homePath, Astro.site)} />
+    <link rel="alternate" hreflang="es" href={new URL(esPath, Astro.site)} />
+    <link rel="alternate" hreflang="x-default" href={new URL(homePath, Astro.site)} />
+    <link rel="icon" type="image/svg+xml" href={asset('/favicon.svg')} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:FILL@0..1&family=Roboto+Flex:opsz,wght@8..144,400..800&family=Roboto+Slab:wght@600;700;800&display=swap" rel="stylesheet" />
+    <title>{t.metaTitle}</title>
+    <script is:inline>document.documentElement.classList.add('js');</script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{t.skip}</a>
+    <div class="scroll-progress" data-scroll-progress></div>
+
+    <header class="top-app-bar" data-header>
+      <a class="brand" href={currentPath} aria-label="Mafeking 265">
+        <span class="brand-logo"><Image src={logo} alt="" width={48} height={48} /></span>
+        <span class="brand-copy"><strong>Mafeking</strong><small>{t.brandSubtitle}</small></span>
+      </a>
+
+      <nav class="desktop-nav" aria-label={t.navLabel}>
+        {t.nav.map(([label, href]: [string, string]) => <a href={href}>{label}</a>)}
+      </nav>
+
+      <div class="header-actions">
+        <a class="language-button" href={alternatePath} lang={locale === 'va' ? 'es' : 'ca'} aria-label={`Canviar idioma: ${t.alternateLabel}`}>
+          <span class="material-symbols-rounded" aria-hidden="true">language</span>{t.alternateLabel}
+        </a>
+        <a class="md-button header-cta" href="#contacte">{t.join}<span class="material-symbols-rounded" aria-hidden="true">arrow_forward</span></a>
+        <button class="menu-button" type="button" aria-expanded="false" aria-controls="mobile-navigation" aria-label={t.menu} data-menu-button>
+          <span class="material-symbols-rounded" aria-hidden="true" data-menu-icon>menu</span>
+        </button>
+      </div>
+
+    </header>
+
+    <nav id="mobile-navigation" class="mobile-nav" aria-label={t.mobileNavLabel} data-mobile-nav>
+      {t.nav.map(([label, href]: [string, string], index: number) => <a href={href}><span class="nav-index">0{index + 1}</span>{label}<span class="material-symbols-rounded nav-icon" aria-hidden="true">arrow_outward</span></a>)}
+      <a class="mobile-join" href="#contacte">{t.join}</a>
+    </nav>
+
+    <main id="main">
+      <section class="hero" aria-labelledby="hero-title" style={`--hero-image: url('${asset('/images/hero.jpg')}')`}>
+        <div class="hero-orbit orbit-one"></div>
+        <div class="hero-orbit orbit-two"></div>
+        <div class="hero-copy" data-reveal>
+          <div class="overline light"><span></span>{t.heroKicker}</div>
+          <h1 id="hero-title">
+            <span>{t.heroTitle[0]}</span>
+            <span>{t.heroTitle[1]}</span>
+            <span class="outline-title">{t.heroTitle[2]}</span>
+          </h1>
+          <p>{t.heroText}</p>
+          <div class="hero-actions">
+            <a class="md-button button-white" href="#contacte">{t.heroPrimary}<span class="material-symbols-rounded" aria-hidden="true">arrow_forward</span></a>
+            <a class="text-button light" href="#qui-som">{t.heroSecondary}<span class="material-symbols-rounded" aria-hidden="true">south</span></a>
+          </div>
+        </div>
+
+        <div class="hero-visual" data-reveal data-delay="1">
+          <div class="hero-photo-main"><img src={asset('/images/hero.jpg')} alt="" fetchpriority="high" /></div>
+          <div class="hero-photo-small"><img src={asset('/images/aventura.jpg')} alt="" /></div>
+          <div class="hero-sticker"><span class="material-symbols-rounded" aria-hidden="true">explore</span><strong>265</strong><small>Alcoi</small></div>
+          <div class="hero-dots" aria-hidden="true"></div>
+        </div>
+
+        <a class="meeting-card" href={t.maps} target="_blank" rel="noreferrer" data-reveal data-delay="2">
+          <span class="meeting-icon material-symbols-rounded" aria-hidden="true">calendar_month</span>
+          <span><small>{t.meetingLabel}</small><strong>{t.meetingDay}</strong></span>
+          <span><small>{t.meetingTime}</small><b>{t.meetingPlace}</b></span>
+          <span class="material-symbols-rounded meeting-arrow" aria-hidden="true">north_east</span>
+        </a>
+      </section>
+
+      <section class="about section" id="qui-som">
+        <div class="about-heading" data-reveal>
+          <div class="section-number">01</div>
+          <div><p class="overline">{t.aboutKicker}</p><h2>{t.aboutTitle}</h2></div>
+        </div>
+        <div class="about-grid">
+          <div class="about-image material-card" data-reveal>
+            <img src={asset('/images/grup.jpg')} alt={t.galleryAlts[0]} loading="lazy" />
+            <span class="image-label"><span class="material-symbols-rounded" aria-hidden="true">groups</span>Mafeking 265</span>
+          </div>
+          <div class="about-content" data-reveal data-delay="1">
+            <p class="lead">{t.aboutLead}</p>
+            <p>{t.aboutText}</p>
+            <div class="stats-row">
+              {t.stats.map(([number, label]: [string, string]) => <div><strong>{number}</strong><span>{label}</span></div>)}
+            </div>
+          </div>
+        </div>
+        <div class="values-grid">
+          {t.values.map(([icon, title, text]: [string, string, string], index: number) => (
+            <article class="value-card material-card" data-reveal data-delay={index}>
+              <span class="value-icon material-symbols-rounded" aria-hidden="true">{icon}</span>
+              <div><h3>{title}</h3><p>{text}</p></div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section class="name section" id="mafeking">
+        <div class="name-head" data-reveal>
+          <div class="section-number">02</div>
+          <div><p class="overline">{t.nameKicker}</p><h2>{t.nameTitle}</h2></div>
+        </div>
+        <div class="name-grid">
+          <div class="name-story" data-reveal>
+            <p class="lead">{t.nameLead}</p>
+            <p>{t.nameText}</p>
+            <div class="name-facts">
+              {t.nameFacts.map(([number, label]: [string, string]) => <div><strong>{number}</strong><span>{label}</span></div>)}
+            </div>
+          </div>
+          <ol class="timeline" data-reveal data-delay="1">
+            {t.nameTimeline.map(([year, text]: [string, string]) => (
+              <li><span class="timeline-year">{year}</span><p>{text}</p></li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section class="branches section" id="branques">
+        <div class="section-intro" data-reveal>
+          <div class="section-number inverse">03</div>
+          <div><p class="overline light">{t.branchesKicker}</p><h2>{t.branchesTitle}</h2></div>
+          <p>{t.branchesText}</p>
+        </div>
+        <div class="branch-grid">
+          {t.branches.map(([name, ages, branchMotto, text, color]: [string, string, string, string, string], index: number) => (
+            <article class="branch-card" style={`--branch: ${color}`} data-reveal data-delay={index % 3}>
+              <div class="branch-top"><span class="branch-chip">{ages} {t.years}</span><span class="branch-index">0{index + 1}</span></div>
+              <div class="branch-symbol" aria-hidden="true"><span></span><span></span><span></span></div>
+              <h3>{name}</h3>
+              <p>{text}</p>
+              <div class="branch-footer"><small>{t.motto}</small><strong>{branchMotto}</strong></div>
+            </article>
+          ))}
+        </div>
+        <p class="branch-note" data-reveal>{t.branchNote}</p>
+      </section>
+
+      <section class="activities section" id="activitats">
+        <div class="activities-head" data-reveal>
+          <div class="section-number">04</div>
+          <div><p class="overline">{t.activitiesKicker}</p><h2>{t.activitiesTitle}</h2></div>
+          <p>{t.activitiesText}</p>
+        </div>
+        <div class="activities-layout">
+          <div class="activity-photo material-card" data-reveal>
+            <img src={asset('/images/activitat.jpg')} alt="" loading="lazy" />
+            <div class="activity-photo-copy"><span class="material-symbols-rounded" aria-hidden="true">forest</span><strong>La natura és<br />la nostra aula.</strong></div>
+          </div>
+          <div class="activity-list">
+            {t.activities.map(([icon, title, text, chip]: [string, string, string, string], index: number) => (
+              <article class="activity-card" data-reveal data-delay={index % 2}>
+                <span class="activity-icon material-symbols-rounded" aria-hidden="true">{icon}</span>
+                <div><span class="outline-chip">{chip}</span><h3>{title}</h3><p>{text}</p></div>
+                <span class="material-symbols-rounded activity-arrow" aria-hidden="true">arrow_outward</span>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section class="calendar section">
+        <div class="calendar-head" data-reveal>
+          <div><p class="overline">{t.calendarKicker}</p><h2>{t.calendarTitle}</h2></div>
+          <p>{t.calendarText}</p>
+        </div>
+        <div class="calendar-grid">
+          {t.calendar.map(([month, title, text]: [string, string, string], index: number) => (
+            <article class="calendar-card" data-reveal data-delay={index % 4}>
+              <span class="calendar-month">{month}</span><h3>{title}</h3><p>{text}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section class="movement section" id="moviment">
+        <div class="movement-head" data-reveal>
+          <div class="section-number inverse">05</div>
+          <div><p class="overline light">{t.movementKicker}</p><h2>{t.movementTitle}</h2></div>
+          <p>{t.movementText}</p>
+        </div>
+        <div class="movement-stats">
+          {t.movementStats.map(([number, label]: [string, string]) => <div><strong>{number}</strong><span>{label}</span></div>)}
+        </div>
+        <div class="org-grid">
+          {t.movementOrgs.map(([name, text]: [string, string], index: number) => (
+            <article class="org-card" data-reveal data-delay={index}>
+              <span class="material-symbols-rounded" aria-hidden="true">{['flag', 'diversity_3', 'public'][index]}</span>
+              <h3>{name}</h3><p>{text}</p>
+            </article>
+          ))}
+        </div>
+        <div class="method-head" data-reveal>
+          <p class="overline light">{t.methodKicker}</p>
+          <h3>{t.methodTitle}</h3>
+          <p>{t.methodText}</p>
+        </div>
+        <div class="method-grid">
+          {t.method.map(([icon, title, text]: [string, string, string], index: number) => (
+            <article class="method-card" data-reveal data-delay={index % 4}>
+              <span class="material-symbols-rounded" aria-hidden="true">{icon}</span>
+              <h3>{title}</h3><p>{text}</p>
+            </article>
+          ))}
+        </div>
+        <div class="commitments" data-reveal>
+          <h3>{t.commitmentsTitle}</h3>
+          <div class="commitment-grid">
+            {t.commitments.map(([icon, title, text]: [string, string, string]) => (
+              <div class="commitment-item"><span class="material-symbols-rounded" aria-hidden="true">{icon}</span><strong>{title}</strong><p>{text}</p></div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section class="gallery section" id="galeria">
+        <div class="gallery-head" data-reveal>
+          <div><div class="section-number">06</div><p class="overline">{t.galleryKicker}</p><h2>{t.galleryTitle}</h2></div>
+          <div><p>{t.galleryText}</p><a class="text-button" href={t.instagram} target="_blank" rel="noreferrer">{t.galleryCta}<span class="material-symbols-rounded" aria-hidden="true">north_east</span></a></div>
+        </div>
+        <div class="gallery-grid">
+          {gallery.map((src, index) => (
+            <figure class={`gallery-item gallery-${index + 1}`} data-reveal data-delay={index % 3}>
+              <img src={src} alt={t.galleryAlts[index]} loading="lazy" />
+              <figcaption><span>0{index + 1}</span><span class="material-symbols-rounded" aria-hidden="true">photo_camera</span></figcaption>
+            </figure>
+          ))}
+          <div class="gallery-quote" data-reveal>
+            <span class="material-symbols-rounded" aria-hidden="true">format_quote</span>
+            <blockquote>“{t.quote}”</blockquote>
+            <small>Robert Baden-Powell</small>
+          </div>
+        </div>
+      </section>
+
+      <section class="social section">
+        <div class="social-heading" data-reveal>
+          <div class="section-number inverse">07</div>
+          <p class="overline light">{t.socialKicker}</p>
+          <h2>{t.socialTitle}</h2>
+          <p>{t.socialText}</p>
+        </div>
+        <div class="resource-grid">
+          {t.resources.map(([icon, eyebrow, title, text, action, href]: [string, string, string, string, string, string], index: number) => (
+            <a class={`resource-card resource-${index + 1}`} href={href} target="_blank" rel="noreferrer" data-reveal data-delay={index}>
+              <div class="resource-top"><span class="material-symbols-rounded" aria-hidden="true">{icon}</span><span class="material-symbols-rounded" aria-hidden="true">north_east</span></div>
+              <div><small>{eyebrow}</small><h3>{title}</h3><p>{text}</p></div>
+              <strong>{action}<span class="material-symbols-rounded" aria-hidden="true">arrow_forward</span></strong>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <section class="docs section" id="documents">
+        <div class="docs-head" data-reveal>
+          <div class="section-number">08</div>
+          <div><p class="overline">{t.docsKicker}</p><h2>{t.docsTitle}</h2></div>
+          <p>{t.docsText}</p>
+        </div>
+        <div class="docs-grid">
+          {t.docs.map(([icon, title, text, action, href]: [string, string, string, string, string], index: number) => (
+            <a class="doc-card" href={href} target="_blank" rel="noreferrer" data-reveal data-delay={index % 3}>
+              <span class="doc-icon material-symbols-rounded" aria-hidden="true">{icon}</span>
+              <h3>{title}</h3><p>{text}</p>
+              <strong>{action}<span class="material-symbols-rounded" aria-hidden="true">north_east</span></strong>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <section class="faq section" id="faq">
+        <div class="faq-head" data-reveal>
+          <div class="section-number">09</div>
+          <div><p class="overline">{t.faqKicker}</p><h2>{t.faqTitle}</h2></div>
+          <p>{t.faqText}</p>
+        </div>
+        <div class="faq-list">
+          {t.faq.map(([q, a]: [string, string], index: number) => (
+            <details class="faq-item" data-reveal data-delay={index % 3}>
+              <summary>{q}<span class="material-symbols-rounded" aria-hidden="true">expand_more</span></summary>
+              <p>{a}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+
+      <section class="contact section" id="contacte">
+        <div class="contact-pattern" aria-hidden="true">265</div>
+        <div class="contact-main" data-reveal>
+          <p class="overline light">{t.contactKicker}</p>
+          <h2>{t.contactTitle}</h2>
+          <p>{t.contactText}</p>
+          <div class="contact-actions">
+            <a class="md-button button-white" href={`mailto:${t.email}`}>{t.writeUs}<span class="material-symbols-rounded" aria-hidden="true">send</span></a>
+            <a class="contact-phone" href={t.phoneHref}><span class="material-symbols-rounded" aria-hidden="true">call</span>{t.phone}</a>
+          </div>
+        </div>
+        <a class="location-card" href={t.maps} target="_blank" rel="noreferrer" data-reveal data-delay="1">
+          <span class="location-icon material-symbols-rounded" aria-hidden="true">location_on</span>
+          <small>{t.headquarters}</small><strong>{t.address}</strong><span>{t.city}</span>
+          <b>{t.directions}<span class="material-symbols-rounded" aria-hidden="true">north_east</span></b>
+        </a>
+      </section>
+    </main>
+
+    <a class="contact-fab" href={`mailto:${t.email}`} aria-label={t.writeUs}><span class="material-symbols-rounded" aria-hidden="true">mail</span></a>
+
+    <footer>
+      <div class="footer-main">
+        <a class="brand footer-brand" href={currentPath}><span class="brand-logo"><Image src={logo} alt="" width={48} height={48} /></span><span class="brand-copy"><strong>Mafeking</strong><small>{t.brandSubtitle}</small></span></a>
+        <p>{t.footerTagline}</p>
+        <div class="footer-social"><a href={t.instagram} target="_blank" rel="noreferrer">Instagram</a><a href={t.facebook} target="_blank" rel="noreferrer">Facebook</a><a href={t.youtube} target="_blank" rel="noreferrer">YouTube</a></div>
+      </div>
+      <div class="footer-bottom"><span>© {new Date().getFullYear()} G.S. Mafeking d’Alcoi 265</span><a href={`mailto:${t.email}`}>{t.email}</a></div>
+    </footer>
+
+    <script>
+      const header = document.querySelector('[data-header]');
+      const progress = document.querySelector('[data-scroll-progress]');
+      const menuButton = document.querySelector('[data-menu-button]');
+      const menuIcon = document.querySelector('[data-menu-icon]');
+      const mobileNav = document.querySelector('[data-mobile-nav]');
+
+      const closeMenu = () => {
+        menuButton?.setAttribute('aria-expanded', 'false');
+        mobileNav?.classList.remove('is-open');
+        if (menuIcon) menuIcon.textContent = 'menu';
+        document.body.classList.remove('menu-open');
+      };
+
+      menuButton?.addEventListener('click', () => {
+        const open = menuButton.getAttribute('aria-expanded') === 'true';
+        menuButton.setAttribute('aria-expanded', String(!open));
+        mobileNav?.classList.toggle('is-open', !open);
+        if (menuIcon) menuIcon.textContent = open ? 'menu' : 'close';
+        document.body.classList.toggle('menu-open', !open);
+      });
+      mobileNav?.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMenu));
+
+      const updateScroll = () => {
+        header?.classList.toggle('is-scrolled', window.scrollY > 24);
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        if (progress instanceof HTMLElement) progress.style.transform = `scaleX(${max > 0 ? window.scrollY / max : 0})`;
+      };
+      updateScroll();
+      window.addEventListener('scroll', updateScroll, { passive: true });
+
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduceMotion) {
+        document.querySelectorAll('[data-reveal]').forEach((element) => element.classList.add('is-visible'));
+      } else {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -48px' });
+        document.querySelectorAll('[data-reveal]').forEach((element) => observer.observe(element));
+      }
+    </script>
+  </body>
+</html>
