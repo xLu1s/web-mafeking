@@ -2,6 +2,8 @@
 
 Web oficial del Grup Scout Mafeking 265 d'Alcoi, ASDE Scouts de España i Scouts Valencians.
 
+**Web publicada:** https://xLu1s.github.io/web-mafeking/ · **Repositorio:** https://github.com/xLu1s/web-mafeking
+
 Sitio estático bilingüe (valenciano / castellano) construido con [Astro](https://astro.build).
 
 ## Desarrollo
